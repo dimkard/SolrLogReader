@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -24,6 +25,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -207,12 +209,12 @@ public class ReaderThread extends Thread {
   }
   
   public final String readLine(MappedByteBuffer map) throws IOException {
-    StringBuilder input = new StringBuilder();
-    int c = -1;
+    ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+    byte b = -1;
     boolean eol = false;
     try {
       while (!eol) {
-        switch (c = map.get()) {
+        switch (b = map.get()) {
           case -1:
           case '\n':
             eol = true;
@@ -225,7 +227,7 @@ public class ReaderThread extends Thread {
             }
             break;
           default:
-            input.append((char) c);
+            byteStream.write(b);
             break;
         }
       }
@@ -233,9 +235,9 @@ public class ReaderThread extends Thread {
       return null;
     }
     
-    if ((c == -1) && (input.length() == 0)) {
+    if ((b == -1) && (byteStream.size() == 0)) {
       return null;
     }
-    return input.toString();
+    return byteStream.toString("UTF-8");
   }
 }
