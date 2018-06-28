@@ -231,6 +231,7 @@ public class SolrLogReader {
         aspects.add(new OpenSearcherAspect(nSlowLoadTimes));
         aspects.add(new CommitAspect());
         aspects.add(new QueryAspect(intanceOutputDir, nSlowQueries));
+        aspects.add(new AuthQueryAspect(intanceOutputDir));
         aspects.add(new ErrorAspect(intanceOutputDir));
         aspects.add(new OutputCoreLoggingAspect(intanceOutputDir));
         for (String aspect : textAspects) {
